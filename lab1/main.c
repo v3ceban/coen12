@@ -36,7 +36,7 @@ int countFileWords(char *fileName){
 
 int main (int argc, char **argv) {
    if (argc < 2) {
-      printf("Please specify a file to read. (i.e. ./main ./scrathc/Macbeth.txt)\n");
+      printf("Please specify a file to read. (i.e. ./countApp ./scrathc/Macbeth.txt)\n");
       return 1;
    }
    if (countFileWords(argv[1])>=0) {
