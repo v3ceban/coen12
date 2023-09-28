@@ -3,7 +3,7 @@
  *
  * Copyright:	2023, Vladimir Ceban 
  *
- * Description: This file contains all the functions used in main for testing text files with various string functions 
+ * Description: This file contains all the functions used in main for testing text files with various string functions
  * See function definitions for more info  
  *  
  */
