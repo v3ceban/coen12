@@ -27,6 +27,7 @@ typedef struct set {
 static int search(SET *sp, char *elt);
 
 // creates set, returns pointer to set
+// O(1)
 SET *createSet(int maxElts) {
   SET *sp;
   sp = malloc(sizeof(SET));
@@ -38,7 +39,8 @@ SET *createSet(int maxElts) {
   return sp;
 }
 
-// frees all set memory
+// deletes set and frees all memory
+// O(n), where n is number of elements in set (sp->count)
 void destroySet(SET *sp) {
   assert(sp != NULL);
   int i;
@@ -52,14 +54,17 @@ void destroySet(SET *sp) {
 }
 
 // returns the number of elements in set
+// O(1)
 int numElements(SET *sp) {
   assert(sp != NULL);
   return (sp->count);
 }
 
-// adds an element to the set and updates number of elements as count
+// adds an element to the set and updates number of elements as sp->count
+// Worst case (not considering search function): O(1), where n is number of elements in set (sp->count)
+// Worst case (considering search function): O(n)
 void addElement(SET *sp, char *elt) {
-  assert(sp != NULL);
+  assert(sp != NULL && elt != NULL);
   if (search(sp, elt) >= 0) {
     return;
   }
@@ -69,14 +74,15 @@ void addElement(SET *sp, char *elt) {
   return;
 }
 
-// searches for a duplicate data in set, returns position of first duplicate or
-// -1
+// searches for a duplicate data in set, returns position of first duplicate or -1
+// Worst case: O(n), where n is number of elements in set (sp->count)
 static int search(SET *sp, char *elt) {
-  assert(sp != NULL);
+  assert(sp != NULL && elt != NULL);
   int i;
   if (sp->count == 0) {
     return -1;
   }
+  // linear search
   for (i = 0; i < sp->count; i++) {
     if (strcmp(elt, sp->data[i]) == 0) {
       return i;
@@ -86,23 +92,27 @@ static int search(SET *sp, char *elt) {
 }
 
 // removes an element from the set and updates count
+// Worst case (not considering search funciton): O(1), where n is number of elements in set (sp->count)
+// Worst case (considering search function): O(n)
 void removeElement(SET *sp, char *elt) {
-  assert(sp != NULL);
+  assert(sp != NULL && elt != NULL);
   int pos = search(sp, elt);
   if (pos < 0) {
     return;
   } else {
-    // point current pointer to last pointer
     free(sp->data[pos]);
+    // move last element to empty slot
     sp->data[pos] = sp->data[sp->count - 1];
     sp->count--;
     return;
   }
 }
 
-// looks for the element in set, returns its conetns if found or NULL otherwise
+// looks for the element in set, returns its contents if found or NULL otherwise
+// O(1) (not considering search)
+// O(n) (considering search), where n is number of elements in set (sp->count)
 char *findElement(SET *sp, char *elt) {
-  assert(sp != NULL);
+  assert(sp != NULL && elt != NULL);
   int pos = search(sp, elt);
   if (pos >= 0) {
     return (sp->data[pos]);
@@ -112,6 +122,7 @@ char *findElement(SET *sp, char *elt) {
 }
 
 // copies all elements from set to a new memory location
+// O(1)
 char **getElements(SET *sp) {
   assert(sp != NULL);
   char **a;
