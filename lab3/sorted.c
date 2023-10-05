@@ -91,7 +91,7 @@ static int search(SET *sp, char *elt, bool *found) {
   int lo, hi, mid, flag;
   hi = sp->count - 1;
   lo = 0;
-  //binary search
+  // binary search
   while (lo <= hi) {
     mid = (hi + lo) / 2;
     flag = strcmp(elt, sp->data[mid]);
@@ -131,7 +131,7 @@ void removeElement(SET *sp, char *elt) {
 
 // looks for the element in set, returns its contents if found or NULL otherwise
 // O(1) (not considering search)
-// O(log(n)) (considering search)
+// O(log(n)) (considering search), where n is number of elements in set (sp->count)
 char *findElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
