@@ -61,8 +61,8 @@ int numElements(SET *sp) {
 }
 
 // adds an element to the set and updates number of elements as sp->count
-// Worst case (not considering search function): O(1), where n is number of elements in set (sp->count)
-// Worst case (considering search function): O(n)
+// Worst case (not considering search function): O(1), where n is number of
+// elements in set (sp->count) Worst case (considering search function): O(n)
 void addElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   if (search(sp, elt) >= 0) {
@@ -74,8 +74,8 @@ void addElement(SET *sp, char *elt) {
   return;
 }
 
-// searches for a duplicate data in set, returns position of first duplicate or -1
-// Worst case: O(n), where n is number of elements in set (sp->count)
+// searches for a duplicate data in set, returns position of first duplicate or
+// -1 Worst case: O(n), where n is number of elements in set (sp->count)
 static int search(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   int i;
@@ -92,8 +92,8 @@ static int search(SET *sp, char *elt) {
 }
 
 // removes an element from the set and updates count
-// Worst case (not considering search funciton): O(1), where n is number of elements in set (sp->count)
-// Worst case (considering search function): O(n)
+// Worst case (not considering search funciton): O(1), where n is number of
+// elements in set (sp->count) Worst case (considering search function): O(n)
 void removeElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   int pos = search(sp, elt);
