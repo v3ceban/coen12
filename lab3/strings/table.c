@@ -32,8 +32,7 @@ SET *createSet(int maxElts){
 }
 
 void destroySet(SET *sp){
-  printf("\n\nDESTROY SET\n\n");
-  return;
+  return(printf("\n\nDESTROY SET\n\n"));
 }
 
 int numElements(SET *sp){
@@ -41,13 +40,11 @@ int numElements(SET *sp){
 }
 
 void addElement(SET *sp, char *elt){
-  printf("\n\nADD ELEMENT\n\n");
-  return;
+  return(printf("\n\nADD ELEMENT\n\n"));
 }
 
 void removeElement(SET *sp, char *elt){
-  printf("\n\nREMOVE ELEMENT\n\n");
-  return;
+  return(printf("\n\nREMOVE ELEMENT\n\n"));
 }
 
 char *findElement(SET *sp, char *elt) {
