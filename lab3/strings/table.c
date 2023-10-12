@@ -18,9 +18,13 @@
 
 // defines SET structure
 typedef struct set {
+  // number of elements in the set
   int count;
+  // max length of set
   int length;
+  // string that set contains
   char **data;
+  // flag to check if the data is deleted
   char *flag;
 } SET;
 
@@ -39,10 +43,11 @@ static unsigned strhash(char *s) {
   return hash;
 }
 
-// creates set, returns pointer to set
-// O(1)
+// creates set with max number of elements defined as maxElts, returns pointer
+// to set, O(maxElts)
 SET *createSet(int maxElts) {
   SET *sp;
+  int i;
   sp = malloc(sizeof(SET));
   assert(sp != NULL);
   sp->count = 0;
@@ -51,7 +56,7 @@ SET *createSet(int maxElts) {
   assert(sp->data != NULL);
   sp->flag = malloc(sizeof(char) * maxElts);
   assert(sp->flag != NULL);
-  int i;
+  // set all flags to empty
   for (i = 0; i < maxElts; i++) {
     sp->flag[i] = 0;
   }
@@ -59,11 +64,12 @@ SET *createSet(int maxElts) {
 }
 
 // deletes set and frees all memory
-// O(n), where n is number of elements in set (sp->count)
+// O(n), where n is the lendgh of the set (sp->length)
 void destroySet(SET *sp) {
   assert(sp != NULL);
   int i;
-  for (i = 0; i < sp->count; i++) {
+  for (i = 0; i < sp->length; i++) {
+    // free data only if it's present and not already deleted
     if (sp->flag[i] == 2) {
       free(sp->data[i]);
     }
@@ -83,29 +89,36 @@ int numElements(SET *sp) {
 }
 
 // searches for a duplicate data in set, returns position of first duplicate or
-// first empty spot in the set Worst case: O(log(n)), where n is number of
-// elements in set (sp->count)
+// first empty spot in the set. Worst case: O(log(n)), where n is the length of
+// set (sp->length). Expected case: O(1)
 static int search(SET *sp, char *elt, bool *found) {
   // don't need to assert for found as it's defined and used locally
   assert(sp != NULL && elt != NULL);
   int i;
+  // find home pos for the elt with hash function
   int pos = strhash(elt) % sp->length;
   for (i = 0; i < sp->length; i++) {
     char flag = sp->flag[pos];
+    // return when found an empty position, as elt is not in the set
     if (flag == 0) {
       *found = false;
       return pos;
+      // return if position has element and it's the same string as elt
     } else if (flag == 2 && strcmp(elt, sp->data[pos]) == 0) {
       *found = true;
       return pos;
+      // update position with linear hashing
     } else {
       pos = (i + strhash(elt)) % sp->length;
     }
   }
+  // return in case something went wrong
   *found = false;
   return pos;
 }
 
+// inserts elt into set if it's not found. Big O fully depends on search
+// function. Worst case O(sp->length). Expected case O(1).
 void addElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
@@ -120,6 +133,8 @@ void addElement(SET *sp, char *elt) {
   return;
 }
 
+// remove elt from set if it's found. Big O fully depends on search
+// function. Worst case O(sp->length). Expected case O(1).
 void removeElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
@@ -144,7 +159,6 @@ char **getElements(SET *sp) {
   assert(sp != NULL);
   char **a;
   int i, j;
-  // printf("\n\nGET ELEMENTS %d %d\n\n", i, count);
   a = malloc(sizeof(char *) * sp->count);
   assert(a != NULL);
   for (i = 0, j = 0; i < sp->length; i++) {
