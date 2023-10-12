@@ -64,7 +64,7 @@ void destroySet(SET *sp) {
   assert(sp != NULL);
   int i;
   for (i = 0; i < sp->count; i++) {
-    if (sp->flag[i] == 2){
+    if (sp->flag[i] == 2) {
       free(sp->data[i]);
     }
   }
