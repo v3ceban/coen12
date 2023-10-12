@@ -64,12 +64,15 @@ void destroySet(SET *sp) {
   assert(sp != NULL);
   int i;
   for (i = 0; i < sp->count; i++) {
-    free(sp->data[i]);
+    if (sp->flag[i] == 2){
+      free(sp->data[i]);
+    }
   }
   // free data pointer
   free(sp->data);
   // free set
   free(sp);
+  return;
 }
 
 // returns the number of elements in set
