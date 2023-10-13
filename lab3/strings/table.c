@@ -123,6 +123,7 @@ void addElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
   int idx = search(sp, elt, &found);
+  // only add if there's no match
   if (!found) {
     assert(sp->count < sp->length);
     sp->data[idx] = strdup(elt);
@@ -139,6 +140,7 @@ void removeElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
   int idx = search(sp, elt, &found);
+  // return if there's no match
   if (!found) {
     return;
   }
@@ -148,6 +150,8 @@ void removeElement(SET *sp, char *elt) {
   return;
 }
 
+// find elt in set and return it or NULL pointer. Big O fully depends on search
+// function. Worst case O(sp->length). Expected case O(1).
 char *findElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
@@ -155,6 +159,8 @@ char *findElement(SET *sp, char *elt) {
   return (found ? sp->data[pos] : NULL);
 }
 
+// get all elements from set and return them as an array of strings. Since the
+// function has to go through the whole set, Big O = O(sp->length)
 char **getElements(SET *sp) {
   assert(sp != NULL);
   char **a;
