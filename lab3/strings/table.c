@@ -94,27 +94,26 @@ int numElements(SET *sp) {
 static int search(SET *sp, char *elt, bool *found) {
   // don't need to assert for found as it's defined and used locally
   assert(sp != NULL && elt != NULL);
-  int i;
+  int i, pos;
   // find home pos for the elt with hash function
-  int pos = strhash(elt) % sp->length;
   for (i = 0; i < sp->length; i++) {
+    pos = (strhash(elt) + i) % sp->length;
     char flag = sp->flag[pos];
     // return when found an empty position, as elt is not in the set
     if (flag == 0) {
       *found = false;
       return pos;
-      // return if position has element and it's the same string as elt
-    } else if (flag == 2 && strcmp(elt, sp->data[pos]) == 0) {
-      *found = true;
-      return pos;
-      // update position with linear hashing
     } else {
-      pos = (i + strhash(elt)) % sp->length;
+      if (strcmp(elt, sp->data[pos]) == 0 && flag == 2) {
+        *found = true;
+        return pos;
+      }
     }
   }
   // return in case something went wrong
-  *found = false;
-  return pos;
+  printf("PROBLEM\n");
+  abort();
+  return -1;
 }
 
 // inserts elt into set if it's not found. Big O fully depends on search
@@ -126,6 +125,7 @@ void addElement(SET *sp, char *elt) {
   // only add if there's no match
   if (!found) {
     assert(sp->count < sp->length);
+    // printf("Count: %d\n", sp->count);
     sp->data[idx] = strdup(elt);
     sp->flag[idx] = 2;
     sp->count++;
