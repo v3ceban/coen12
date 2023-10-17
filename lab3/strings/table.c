@@ -100,12 +100,11 @@ static int search(SET *sp, char *elt, bool *found) {
   for (i = 0; i < sp->length; i++) {
     // find position for the elt with hash function using linear hashing
     pos = (strhash(elt) + i) % sp->length;
-    switch (sp->flag[pos])
-    {
+    switch (sp->flag[pos]) {
     // encountered a filled position
     case 2:
       // check if found
-      if (strcmp(elt, sp->data[pos]) == 0){
+      if (strcmp(elt, sp->data[pos]) == 0) {
         *found = true;
         return pos;
       }
@@ -115,8 +114,8 @@ static int search(SET *sp, char *elt, bool *found) {
     case 1:
       // check if it's first deleted and mark it
       if (!delF) {
-            delF = true;
-            del = pos;
+        delF = true;
+        del = pos;
       }
       break;
 
@@ -124,7 +123,8 @@ static int search(SET *sp, char *elt, bool *found) {
     default:
       // return not found
       *found = false;
-      // if return del if there was a deleted element or pos if there was no deleted elements encountered
+      // if return del if there was a deleted element or pos if there was no
+      // deleted elements encountered
       return (delF ? del : pos);
     }
   }
