@@ -144,7 +144,6 @@ void addElement(SET *sp, char *elt) {
     sp->data[idx] = strdup(elt);
     sp->flag[idx] = 2;
     sp->count++;
-    return;
   }
   return;
 }
@@ -155,13 +154,12 @@ void removeElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
   int idx = search(sp, elt, &found);
-  // return if there's no match
-  if (!found) {
-    return;
+  // delete only if found
+  if (found) {
+    free(sp->data[idx]);
+    sp->flag[idx] = 1;
+    sp->count--;
   }
-  free(sp->data[idx]);
-  sp->flag[idx] = 1;
-  sp->count--;
   return;
 }
 
