@@ -94,26 +94,42 @@ int numElements(SET *sp) {
 static int search(SET *sp, char *elt, bool *found) {
   // don't need to assert for found as it's defined and used locally
   assert(sp != NULL && elt != NULL);
-  int i, pos;
-  // find home pos for the elt with hash function
+  int i, pos, del;
+  bool delF = false;
+
   for (i = 0; i < sp->length; i++) {
+    // find position for the elt with hash function using linear hashing
     pos = (strhash(elt) + i) % sp->length;
-    char flag = sp->flag[pos];
-    // return when found an empty position, as elt is not in the set
-    if (flag == 0) {
-      *found = false;
-      return pos;
-    } else {
-      if (strcmp(elt, sp->data[pos]) == 0 && flag == 2) {
+    switch (sp->flag[pos])
+    {
+    // encountered a filled position
+    case 2:
+      // check if found
+      if (strcmp(elt, sp->data[pos]) == 0){
         *found = true;
         return pos;
       }
+      break;
+
+    // encountered a deleted position
+    case 1:
+      // check if it's first deleted and mark it
+      if (!delF) {
+            delF = true;
+            del = pos;
+      }
+      break;
+
+    // encountered an empty position
+    default:
+      // return not found
+      *found = false;
+      // if return del if there was a deleted element or pos if there was no deleted elements encountered
+      return (delF ? del : pos);
     }
   }
-  // return in case something went wrong
-  printf("PROBLEM\n");
+  // if something went wrong abort ffs (for fun's sake)
   abort();
-  return -1;
 }
 
 // inserts elt into set if it's not found. Big O fully depends on search
@@ -125,7 +141,6 @@ void addElement(SET *sp, char *elt) {
   // only add if there's no match
   if (!found) {
     assert(sp->count < sp->length);
-    // printf("Count: %d\n", sp->count);
     sp->data[idx] = strdup(elt);
     sp->flag[idx] = 2;
     sp->count++;
