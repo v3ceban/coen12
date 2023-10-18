@@ -35,6 +35,7 @@ static int search(SET *sp, char *elt, bool *found);
 static unsigned strhash(char *s);
 
 // hash function
+// O(strlen(s))
 static unsigned strhash(char *s) {
   unsigned hash = 0;
   while (*s != '\0') {
@@ -76,6 +77,8 @@ void destroySet(SET *sp) {
   }
   // free data pointer
   free(sp->data);
+  // free flags
+  free(sp->flag);
   // free set
   free(sp);
   return;
@@ -89,7 +92,7 @@ int numElements(SET *sp) {
 }
 
 // searches for a duplicate data in set, returns position of first duplicate or
-// first empty spot in the set. Worst case: O(log(n)), where n is the length of
+// first empty spot in the set. Worst case: O(n), where n is the length of
 // set (sp->length). Expected case: O(1)
 static int search(SET *sp, char *elt, bool *found) {
   // don't need to assert for found as it's defined and used locally

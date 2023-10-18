@@ -61,8 +61,8 @@ int numElements(SET *sp) {
 }
 
 // adds an element to the set and updates number of elements as sp->count
-// Worst case (not considering search function): O(n), where n is number of elements in set (sp->count)
-// Worst case (considering search function): O(n*log(n))
+// Worst case (not considering search function): O(n), where n is number of
+// elements in set (sp->count) Worst case (considering search function): O(n)
 void addElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
@@ -83,8 +83,9 @@ void addElement(SET *sp, char *elt) {
   return;
 }
 
-// searches for a duplicate data in set, returns position of first duplicate or first empty spot in the set
-// Worst case: O(log(n)), where n is number of elements in set (sp->count)
+// searches for a duplicate data in set, returns position of first duplicate or
+// first empty spot in the set Worst case: O(log(n)), where n is number of
+// elements in set (sp->count)
 static int search(SET *sp, char *elt, bool *found) {
   // don't need to assert for found as it's defined and used locally
   assert(sp != NULL && elt != NULL);
@@ -109,8 +110,9 @@ static int search(SET *sp, char *elt, bool *found) {
 }
 
 // removes an element from the set and updates count
-// Worst case (not considering search funciton): O(n), where n is number of elements in set (sp->count)
-// Worst case (considering search function): O(n*log(n))
+// Worst case (not considering search funciton): O(n), where n is number of
+// elements in set (sp->count) Worst case (considering search function):
+// O(n*log(n))
 void removeElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
@@ -131,7 +133,8 @@ void removeElement(SET *sp, char *elt) {
 
 // looks for the element in set, returns its contents if found or NULL otherwise
 // O(1) (not considering search)
-// O(log(n)) (considering search), where n is number of elements in set (sp->count)
+// O(log(n)) (considering search), where n is number of elements in set
+// (sp->count)
 char *findElement(SET *sp, char *elt) {
   assert(sp != NULL && elt != NULL);
   bool found;
@@ -140,7 +143,7 @@ char *findElement(SET *sp, char *elt) {
 }
 
 // copies all elements from set to a new memory location
-// O(1)
+// O(n)
 char **getElements(SET *sp) {
   assert(sp != NULL);
   char **a;
