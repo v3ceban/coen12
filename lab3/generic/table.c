@@ -64,13 +64,6 @@ SET *createSet(int maxElts, int (*compare)(void *elt1, void *elt2),
 // O(n), where n is the lendgh of the set (sp->length)
 void destroySet(SET *sp) {
   assert(sp != NULL);
-  int i;
-  for (i = 0; i < sp->length; i++) {
-    // free data only if it's present and not already deleted
-    if (sp->flag[i] == 2) {
-      free(sp->data[i]);
-    }
-  }
   // free data pointer
   free(sp->data);
   // free set
@@ -125,7 +118,7 @@ static int search(SET *sp, void *elt, bool *found) {
       return (delF ? del : pos);
     }
   }
-  // if something went wrong abort ffs (for fun's sake)
+  // if sodatahing went wrong abort ffs (for fun's sake)
   abort();
 }
 
