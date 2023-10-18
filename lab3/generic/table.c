@@ -61,7 +61,7 @@ SET *createSet(int maxElts, int (*compare)(void *elt1, void *elt2),
 }
 
 // deletes set and frees all memory
-// O(n), where n is the lendgh of the set (sp->length)
+// O(1)
 void destroySet(SET *sp) {
   assert(sp != NULL);
   // free data pointer
