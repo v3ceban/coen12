@@ -37,14 +37,15 @@ static int search(SET *sp, void *elt, bool *found);
 
 // creates set with max number of elements defined as maxElts, returns pointer
 // to set, O(maxElts)
-SET *createSet(int maxElts, int (*compare)(), unsigned (*hash)()) {
+SET *createSet(int maxElts, int (*compare)(void *elt1, void *elt2),
+               unsigned (*hash)(void *elt)) {
   SET *sp;
   int i;
   sp = malloc(sizeof(SET));
   assert(sp != NULL);
   sp->count = 0;
   sp->length = maxElts;
-  sp->data = malloc(sizeof(char *) * maxElts);
+  sp->data = malloc(sizeof(void *) * maxElts);
   assert(sp->data != NULL);
   sp->flag = malloc(sizeof(char) * maxElts);
   assert(sp->flag != NULL);
@@ -171,14 +172,14 @@ void *findElement(SET *sp, void *elt) {
 // function has to go through the whole set, Big O = O(sp->length)
 void *getElements(SET *sp) {
   assert(sp != NULL);
-  char **a;
+  void **a;
   int i, j;
-  a = malloc(sizeof(char *) * sp->count);
+  a = malloc(sizeof(void *) * sp->count);
   assert(a != NULL);
   for (i = 0, j = 0; i < sp->length; i++) {
     if (sp->flag[i] == 2) {
-      char *str = strdup(sp->data[i]);
-      a[j] = str;
+      void *data = sp->data[i];
+      a[j] = data;
       j++;
     }
   }
