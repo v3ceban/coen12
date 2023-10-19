@@ -137,12 +137,11 @@ static int search(SET *sp, char *elt, bool *found) {
 // O(n), where n is the lenthg of the set. This is because the function calls
 // the search function. Expected O(1).
 void addElement(SET *sp, char *elt) {
-  assert(sp != NULL && elt != NULL);
+  assert(sp != NULL && elt != NULL && sp->count < sp->length);
   bool found;
   int idx = search(sp, elt, &found);
   // Only add if there's no match
   if (!found) {
-    assert(sp->count < sp->length);
     sp->data[idx] = strdup(elt);
     sp->flag[idx] = 2;
     sp->count++;
