@@ -36,12 +36,11 @@ typedef struct set {
 static int search(SET *sp, void *elt, bool *found);
 
 // Creates set with max number of elements defined as maxElts, returns pointer
-// to set. The Big-O runtime of this function is O(n), where n is the lenthg of
-// the set, as it iterates through the loop for a maximum of maxElts times.
+// to set. The Big-O runtime of this function is O(1) because it has a constant
+// time complexity.
 SET *createSet(int maxElts, int (*compare)(void *elt1, void *elt2),
                unsigned (*hash)(void *elt)) {
   SET *sp;
-  int i;
   sp = malloc(sizeof(SET));
   assert(sp != NULL);
   sp->count = 0;
@@ -52,10 +51,6 @@ SET *createSet(int maxElts, int (*compare)(void *elt1, void *elt2),
   assert(sp->flag != NULL);
   sp->compare = compare;
   sp->hash = hash;
-  // Set all flags to empty
-  for (i = 0; i < maxElts; i++) {
-    sp->flag[i] = 0;
-  }
   return sp;
 }
 

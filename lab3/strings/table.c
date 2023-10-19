@@ -46,11 +46,10 @@ static unsigned strhash(char *s) {
 }
 
 // Creates set with max number of elements defined as maxElts, returns pointer
-// to set. The Big-O runtime of this function is O(n), where n is the lenthg of
-// the set, as it iterates through the loop for a maximum of maxElts times.
+// to set. The Big-O runtime of this function is O(1) because it has a constant
+// time complexity.
 SET *createSet(int maxElts) {
   SET *sp;
-  int i;
   sp = malloc(sizeof(SET));
   assert(sp != NULL);
   sp->count = 0;
@@ -59,10 +58,6 @@ SET *createSet(int maxElts) {
   assert(sp->data != NULL);
   sp->flag = malloc(sizeof(char) * maxElts);
   assert(sp->flag != NULL);
-  // set all flags to empty
-  for (i = 0; i < maxElts; i++) {
-    sp->flag[i] = 0;
-  }
   return sp;
 }
 
