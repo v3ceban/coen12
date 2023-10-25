@@ -44,7 +44,7 @@ void destroyList(LIST *lp) {
   assert(lp != NULL);
   NODE *current, *next;
   current = lp->head->next;
-  while (current != NULL) {
+  while (current != lp->head) {
     next = current->next;
     free(current);
     current = next;
@@ -121,18 +121,12 @@ void *removeLast(LIST *lp) {
 }
 
 void *getFirst(LIST *lp) {
-  assert(lp != NULL);
-  if (lp->count == 0) {
-    return NULL;
-  }
+  assert(lp != NULL && lp->count > 0);
   return (lp->head->next->data);
 }
 
 void *getLast(LIST *lp) {
-  assert(lp != NULL);
-  if (lp->count == 0) {
-    return NULL;
-  }
+  assert(lp != NULL && lp->count > 0);
   return (lp->head->prev->data);
 }
 
