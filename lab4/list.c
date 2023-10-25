@@ -47,21 +47,20 @@ LIST *createList(int (*compare)(void *elt1, void *elt2)) {
 }
 
 // deletes the whole list and frees all memory
+// Big O = O(lp->count)
 void destroyList(LIST *lp) {
   assert(lp != NULL); // check that lp pointer was received correctly
-  NODE *current;
-  current = lp->head->next;     // start deleting from head
-  while (current != lp->head) { // cycle untill return to head
-    lp->head->next = current->next;
-    // next = current->next;       // save next node to move to later
-    free(current); // free current node
-    current = lp->head->next;
-    // current = next; // move current node to next
-  }
-  free(lp->head); // free head
-  free(lp);       // free list
+  NODE *current = lp->head->next; // start deleting from first node
+  do {
+    lp->head->next = current->next; // move head->next to save the node
+    free(current);                  // free current node
+    current = lp->head->next;       // restore the saved node
+  } while (current != lp->head);    // cycle untill return to head
+  free(lp->head);                   // free head
+  free(lp);                         // free list
 }
 
+// retunr the number of nodes in the list
 int numItems(LIST *lp) {
   assert(lp != NULL);
   return (lp->count);
