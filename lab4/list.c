@@ -55,28 +55,29 @@ void destroyList(LIST *lp) {
     lp->head->next = current->next; // move head->next to save the node
     free(current);                  // free current node
     current = lp->head->next;       // restore the saved node
-  }
+  }               // do while loop didn't work, but maybe I did something wrong
   free(lp->head); // free head
   free(lp);       // free list
 }
 
-// retunr the number of nodes in the list
+// return the number of nodes in the list
+// Big O = O(1)
 int numItems(LIST *lp) {
-  assert(lp != NULL);
-  return (lp->count);
+  assert(lp != NULL); // check that lp is alright
+  return (lp->count); // return it
 }
 
+// add a node as first element in the list
 void addFirst(LIST *lp, void *item) {
-  assert(lp != NULL && item != NULL);
-  NODE *newNode = (NODE *)malloc(sizeof(NODE));
-  assert(newNode != NULL);
-  NODE *head = lp->head;
+  assert(lp != NULL && item != NULL);           // check that we got everything
+  NODE *newNode = (NODE *)malloc(sizeof(NODE)); // allocate memory for new node
+  assert(newNode != NULL); // make sure allocation was successful
   newNode->data = item;
 
-  newNode->next = head->next;
-  newNode->prev = head;
-  head->next->prev = newNode;
-  head->next = newNode;
+  newNode->next = lp->head->next;
+  newNode->prev = lp->head;
+  lp->head->next->prev = newNode;
+  lp->head->next = newNode;
   lp->count++;
 }
 
