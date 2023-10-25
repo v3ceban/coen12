@@ -9,6 +9,7 @@
  *
  */
 
+// include headers and libraries
 #include "list.h"
 #include <assert.h>
 #include <stdbool.h>
@@ -16,41 +17,49 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct list {
+typedef struct list { // define struct list
   int count;
+  // list containst the head that points to other nodes in the list
   struct node *head;
+  // list also has a compare function implemented in driver main function
   int (*compare)(void *elt1, void *elt2);
 } LIST;
 
-typedef struct node {
+typedef struct node { // define struct NODE
   void *data;
+  // each node points to next and previous nodes in the list
   struct node *next;
   struct node *prev;
 } NODE;
 
+// creates list pointer and returns a LIST pointer
+// Big O = O(1)
 LIST *createList(int (*compare)(void *elt1, void *elt2)) {
-  LIST *list = (LIST *)malloc(sizeof(LIST));
-  assert(list != NULL);
-  NODE *head = (NODE *)malloc(sizeof(NODE));
-  assert(head != NULL);
-  list->head = head;
-  head->next = head->prev = head;
-  list->compare = compare;
-  list->count = 0;
+  LIST *list = (LIST *)malloc(sizeof(LIST)); // allocate memory for the list
+  assert(list != NULL);                      // check if it worked
+  NODE *head = (NODE *)malloc(sizeof(NODE)); // allocate memory for dummy node
+  assert(head != NULL);                      // make sure it allocated correctly
+  list->head = head;              // assign list's head to created dummy node
+  head->next = head->prev = head; // set head to point to itself
+  list->compare = compare;        // assign compare pointer to function pointer
+  list->count = 0;                // set number of nodes in list to zero
   return list;
 }
 
+// deletes the whole list and frees all memory
 void destroyList(LIST *lp) {
-  assert(lp != NULL);
-  NODE *current, *next;
-  current = lp->head->next;
-  while (current != lp->head) {
-    next = current->next;
-    free(current);
-    current = next;
+  assert(lp != NULL); // check that lp pointer was received correctly
+  NODE *current;
+  current = lp->head->next;     // start deleting from head
+  while (current != lp->head) { // cycle untill return to head
+    lp->head->next = current->next;
+    // next = current->next;       // save next node to move to later
+    free(current); // free current node
+    current = lp->head->next;
+    // current = next; // move current node to next
   }
-  free(lp->head);
-  free(lp);
+  free(lp->head); // free head
+  free(lp);       // free list
 }
 
 int numItems(LIST *lp) {
