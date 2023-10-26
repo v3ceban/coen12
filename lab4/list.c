@@ -68,38 +68,41 @@ int numItems(LIST *lp) {
 }
 
 // add a node as first element in the list
+// Big O = O(1)
 void addFirst(LIST *lp, void *item) {
   assert(lp != NULL && item != NULL);           // check that we got everything
   NODE *newNode = (NODE *)malloc(sizeof(NODE)); // allocate memory for new node
   assert(newNode != NULL); // make sure allocation was successful
-  newNode->data = item;
+  newNode->data = item;    // copy item to new node's data
 
+  // shift pointers around to insert new node
   newNode->next = lp->head->next;
   newNode->prev = lp->head;
   lp->head->next->prev = newNode;
   lp->head->next = newNode;
-  lp->count++;
+  lp->count++; // update counter
 }
 
+// add a node as last element in the list
+// Big O = O(1)
 void addLast(LIST *lp, void *item) {
-  assert(lp != NULL && item != NULL);
-  NODE *newNode = (NODE *)malloc(sizeof(NODE));
-  assert(newNode != NULL);
-  NODE *head = lp->head;
-  newNode->data = item;
+  assert(lp != NULL && item != NULL);           // check variables
+  NODE *newNode = (NODE *)malloc(sizeof(NODE)); // allocate memory for new node
+  assert(newNode != NULL);                      // check allocation
+  newNode->data = item;                         // copy item to new node's data
 
-  newNode->next = head;
-  newNode->prev = head->prev;
-  head->prev->next = newNode;
-  head->prev = newNode;
-  lp->count++;
+  // shift pointers around to insert a new node
+  newNode->next = lp->head;
+  newNode->prev = lp->head->prev;
+  lp->head->prev->next = newNode;
+  lp->head->prev = newNode;
+  lp->count++; // update counter
 }
 
+// delete first node in the list (not head, as it's a dummy node and doesn't
+// count). Big O = O(1)
 void *removeFirst(LIST *lp) {
-  assert(lp != NULL);
-  if (lp->count == 0) {
-    return NULL;
-  }
+  assert(lp != NULL && lp->count > 0);
   NODE *head = lp->head;
   NODE *first = head->next;
   void *data = first->data;
@@ -113,10 +116,7 @@ void *removeFirst(LIST *lp) {
 }
 
 void *removeLast(LIST *lp) {
-  assert(lp != NULL);
-  if (lp->count == 0) {
-    return NULL;
-  }
+  assert(lp != NULL && lp->count > 0);
   NODE *head = lp->head;
   NODE *last = head->prev;
   void *data = last->data;
