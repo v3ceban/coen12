@@ -102,30 +102,30 @@ void addLast(LIST *lp, void *item) {
 // delete first node in the list (not head, as it's a dummy node and doesn't
 // count). Big O = O(1)
 void *removeFirst(LIST *lp) {
-  assert(lp != NULL && lp->count > 0);
-  NODE *head = lp->head;
-  NODE *first = head->next;
-  void *data = first->data;
+  assert(lp != NULL && lp->count > 0); // check if lp is alive and isn't empty
+  NODE *first = lp->head->next;        // first node is after head
+  void *data = first->data;            // copy data to return it
 
-  head->next = first->next;
+  // shift pointers around to delete first node
+  lp->head->next = first->next;
   first->next->prev = first->next;
 
-  lp->count--;
-  free(first);
+  lp->count--; // update counter
+  free(first); // free node
   return data;
 }
 
 void *removeLast(LIST *lp) {
-  assert(lp != NULL && lp->count > 0);
-  NODE *head = lp->head;
-  NODE *last = head->prev;
-  void *data = last->data;
+  assert(lp != NULL && lp->count > 0); // check if lp is alive and isn't empty
+  NODE *last = lp->head->prev;         // last node is before head
+  void *data = last->data;             // copy data to return it
 
-  head->prev = last->prev;
+  // shift pointers around to delete last node
+  lp->head->prev = last->prev;
   last->prev->next = last->next;
 
-  lp->count--;
-  free(last);
+  lp->count--; // update counter
+  free(last);  // free node
   return data;
 }
 
