@@ -194,10 +194,7 @@ void *getLast(LIST *lp) {
 void removeItem(LIST *lp, void *item) {
   // check that lp and item are valid and that list is not empty
   // assert(lp != NULL && item != NULL && lp->count > 0);
-  assert(lp != NULL);
-  assert(item != NULL);
-  assert(lp->count > 0);
-
+  assert(lp != NULL && item != NULL && lp->count > 0);
   NODE *current;
   // start searching from the first node and look until we return to the head
   for (current = lp->head->next; current != lp->head; current = current->next) {
