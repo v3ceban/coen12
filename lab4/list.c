@@ -193,14 +193,17 @@ void *getLast(LIST *lp) {
 // Big O = O(lp->count)
 void removeItem(LIST *lp, void *item) {
   // check that lp and item are valid and that list is not empty
-  assert(lp != NULL && item != NULL && lp->count > 0);
+  // assert(lp != NULL && item != NULL && lp->count > 0);
+  assert(lp != NULL);
+  assert(item != NULL);
+  assert(lp->count > 0);
 
   NODE *current;
   // start searching from the first node and look until we return to the head
   for (current = lp->head->next; current != lp->head; current = current->next) {
     if (lp->compare(item, current->data) == 0) { // if node's data matches item
       // shift pointers to delete node
-      current->prev = current->next;
+      current->prev->next = current->next;
       current->next->prev = current->prev;
 
       // delete node and update counter
@@ -216,7 +219,7 @@ void removeItem(LIST *lp, void *item) {
 // Big O = O(lp->count)
 void *findItem(LIST *lp, void *item) {
   // check that lp and item are valid and that list is not empty
-  assert(lp != NULL && item != NULL && lp->count > 0);
+  assert(lp != NULL && item != NULL && lp->count >= 0);
   NODE *current;
   // start searching from the first node and look until we return to the head
   for (current = lp->head->next; current != lp->head; current = current->next) {
@@ -238,11 +241,12 @@ void *getItems(LIST *lp) {
   assert(items != NULL);
 
   NODE *current;
+  int idx = 0;
   // loop through the array from first node untill we return back to head
   for (current = lp->head->next; current != lp->head;
-       current = current->next, items++) {
-    // copy data to items
-    items = current->data;
+       current = current->next, idx++) {
+    // copy data to items array
+    items[idx] = current->data;
   }
 
   return items;
