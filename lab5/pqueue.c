@@ -65,7 +65,7 @@ void addEntry(PQ *pq, void *entry) {
   // swap new entry with its parent until either:
   // a. new entry is root
   // b. new entry is smaller than its parent
-  while (this > 0 && pq->compare(pq->data[this], pq->data[parent]) > 0) {
+  while (this > 0 && pq->compare(pq->data[this], pq->data[parent]) < 0) {
     void *temp = pq->data[this];
     pq->data[this] = pq->data[parent];
     pq->data[parent] = temp;
@@ -102,12 +102,12 @@ void *removeEntry(PQ *pq) {
 
     // check which child's data is larger: left or right
     int max = left;
-    if (right < pq->count && pq->compare(pq->data[right], pq->data[left]) > 0) {
+    if (right < pq->count && pq->compare(pq->data[right], pq->data[left]) < 0) {
       max = right;
     }
 
     // compare data in parent and child. swap them if child's data is larger
-    if (pq->compare(pq->data[this], pq->data[max]) < 0) {
+    if (pq->compare(pq->data[this], pq->data[max]) > 0) {
 
       void *temp = pq->data[this];
       pq->data[this] = pq->data[max];
