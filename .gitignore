@@ -1,24 +1,11 @@
 *.tar
+*.o
 
 parity
-parity.o
-
 unique
-unique.o
-
-table.o
-
 counts
-counts.o
-
 count
-
-set.o
-
-list.o
-
-maze.o
 maze
-
-radix.o
 radix
+sort
+huffman
