@@ -15,7 +15,7 @@ PQ *createQueue(int (*compare)()) {
   assert(compare != NULL);
 
   // me malloc q. me assert q
-  PQ *q = (PQ *)malloc(sizeof(PQ));
+  PQ *q = malloc(sizeof(PQ));
   assert(q != NULL);
 
   // initialize empty queue with initial length
@@ -24,8 +24,9 @@ PQ *createQueue(int (*compare)()) {
   q->compare = compare;
 
   // me malloc array. me assert array
-  q->data = (void **)malloc(q->length * sizeof(void *));
+  q->data = malloc(q->length * sizeof(void *));
   assert(q->data != NULL);
+
   return q;
 }
 
@@ -34,7 +35,6 @@ void destroyQueue(PQ *pq) {
   assert(pq != NULL);
   free(pq->data);
   free(pq);
-  return;
 }
 
 int numEntries(PQ *pq) {
@@ -51,6 +51,8 @@ void addEntry(PQ *pq, void *entry) {
   if (pq->count == pq->length) {
     pq->length *= 2;
     pq->data = realloc(pq->data, pq->length * sizeof(void *));
+    // me allocate. me assert
+    assert(pq->data != NULL);
   }
 
   // add entry to the end of array and update count
@@ -75,8 +77,6 @@ void addEntry(PQ *pq, void *entry) {
     parent = (this - 1) / 2;
   }
   /*** END HEAP UP ***/
-
-  return;
 }
 
 void *removeEntry(PQ *pq) {
