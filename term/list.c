@@ -23,17 +23,22 @@ typedef struct list {
 // defines local function to create nodes
 static NODE *createNode(NODE *);
 
+// creates list with sentinel head node
+// head holds length of the array in next created node
 LIST *createList(void) {
   LIST *lp = malloc(sizeof(LIST));
   assert(lp != NULL);
+
   NODE *head = malloc(sizeof(NODE));
   assert(head != NULL);
+
   lp->head = head;
   head->next = head->prev = lp->head;
   head->data = NULL;
   head->count = head->start = 0;
   head->length = 10;
   lp->count = 0;
+
   return lp;
 }
 
@@ -120,29 +125,37 @@ void addLast(LIST *lp, void *item) {
   return;
 }
 
-// copied
 void *removeFirst(LIST *lp) {
   assert(lp != NULL && lp->count > 0);
-  NODE *first = lp->head->next;
+
+  NODE *head = lp->head;
+  NODE *first = head->next;
   void *data = first->data;
-  lp->head->next = first->next;
-  first->next->prev = first->next;
-  lp->count--;
+
+  head->next = first->next;
+  first->next->prev = head;
+  lp->count -= first->count;
+
   free(first);
+
   return data;
 }
 
-// copied
-// void *removeLast(LIST *lp) {
-//   assert(lp != NULL && lp->count > 0);
-//   NODE *last = lp->head->prev;
-//   void *data = last->data;
-//   lp->head->prev = last->prev;
-//   last->prev->next = last->next;
-//   lp->count--;
-//   free(last);
-//   return data;
-// }
+void *removeLast(LIST *lp) {
+  assert(lp != NULL && lp->count > 0);
+
+  NODE *head = lp->head;
+  NODE *last = head->prev;
+  void *data = last->data;
+
+  head->prev = last->prev;
+  last->prev->next = head;
+  lp->count -= last->count;
+
+  free(last);
+
+  return data;
+}
 
 // copied
 // void *getFirst(LIST *lp) {
