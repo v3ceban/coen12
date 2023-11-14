@@ -4,39 +4,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// For data I need to know:
-// 1. Length of the array, which is a constant
-// 2. Current position of head
-// 3. Number of items in the array
-
-// Nodes should have next and prev pointers for easy access to last and first
-// node from head
-
+// defines node
 typedef struct node {
-  void **data;
-  int start;
-  int count;
-  int length;
-  struct node *next;
-  struct node *prev;
+  void **data;       // array with data
+  int start;         // index of first position in array
+  int count;         // num of elements in array
+  int length;        // max length of array
+  struct node *next; // points to next node
+  struct node *prev; // points to previous nodev
 } NODE;
 
-// No need for tail pointer as head points in both directions
-// Head is sentinel
-
+// defines list
 typedef struct list {
-  int count;
-  NODE *head;
+  int count;  // num of items in list (summ of all node->counts)
+  NODE *head; // points to sentinel head node
 } LIST;
+
+// defines local function to create nodes
+static NODE *createNode(NODE *);
 
 LIST *createList(void) {
   LIST *lp = malloc(sizeof(LIST));
   assert(lp != NULL);
-  lp->head = malloc(sizeof(NODE));
-  assert(lp->head != NULL);
-  lp->head->next = lp->head;
-  lp->head->prev = lp->head;
-  lp->head->length = lp->head->count = 0;
+  NODE *head = malloc(sizeof(NODE));
+  assert(head != NULL);
+  lp->head = head;
+  head->next = head->prev = lp->head;
+  head->data = NULL;
+  head->count = head->start = 0;
+  head->length = 10;
   lp->count = 0;
   return lp;
 }
@@ -58,59 +54,83 @@ int numItems(LIST *lp) {
   return lp->count;
 }
 
+// creates a new node based on heads length and returns a pointer to it
+static NODE *createNode(NODE *head) {
+  NODE *new = malloc(sizeof(NODE));
+  assert(new != NULL);
+  // create empty node
+  new->count = new->start = 0;
+  new->length = head->length;
+  new->data = malloc(sizeof(void *) * new->length);
+  assert(new->data != NULL);
+
+  // double length for next node
+  head->length *= 2;
+
+  return (new);
+}
+
 void addFirst(LIST *lp, void *item) {
   assert(lp != NULL && item != NULL);
-  NODE *first = lp->head->next;
+  // setup some pointers to make code cleaner
+  NODE *head = lp->head;
+  NODE *first = head->next;
+  // if it's the very first node in the list or if the first node is full
+  if (first == head || first->count == first->length) {
+    NODE *new = createNode(head);
 
-  if (first->count == first->length) {
-    // create new node
-    NODE *newNode = (NODE *)malloc(sizeof(NODE));
-    assert(newNode != NULL);
-    // create the array in the node
-    newNode->data = (void **)malloc(lp->head->next->length * sizeof(void *));
-    assert(newNode->data != NULL);
-    newNode->count = 0;
-    newNode->length = 10;
-    newNode->start = 0;
-    newNode->data[newNode->start] = item;
-    newNode->next = first;
-    newNode->prev = lp->head;
-    first->prev = newNode;
-    first = newNode;
-  } else {
-    int idx = (first->count - 1) + first->start % first->length;
-    first->data[idx] = item;
+    // shift pounters around
+    new->next = first;
+    new->prev = head;
+    head->next = first->prev = new;
+
+    // update the first pointer to use later in the function
+    first = new;
   }
 
+  first->data[first->start + (first->count % first->length)] = item;
+  first->count++;
   lp->count++;
+
+  return;
+}
+
+void addLast(LIST *lp, void *item) {
+  assert(lp != NULL && item != NULL);
+  // setup some pointers to make code cleaner
+  NODE *head = lp->head;
+  NODE *last = head->prev;
+  // if it's the very first node in the list or if the last node is full
+  if (last == head || last->count == last->length) {
+    NODE *new = createNode(head);
+
+    // shift pounters around
+    new->prev = last;
+    new->next = head;
+    head->prev = last->next = new;
+
+    // update the first pointer to use later in the function
+    last = new;
+  }
+
+  last->data[last->start + (last->count % last->length)] = item;
+  last->count++;
+  lp->count++;
+
   return;
 }
 
 // copied
-// void addLast(LIST *lp, void *item) {
-//   assert(lp != NULL && item != NULL);
-//   NODE *newNode = (NODE *)malloc(sizeof(NODE));
-//   assert(newNode != NULL);
-//   newNode->data = item;
-//   newNode->next = lp->head;
-//   newNode->prev = lp->head->prev;
-//   lp->head->prev->next = newNode;
-//   lp->head->prev = newNode;
-//   lp->count++;
-//   return;
-// }
-
-// copied
-// void *removeFirst(LIST *lp) {
-//   assert(lp != NULL && lp->count > 0);
-//   NODE *first = lp->head->next;
-//   void *data = first->data;
-//   lp->head->next = first->next;
-//   first->next->prev = first->next;
-//   lp->count--;
-//   free(first);
-//   return data;
-// }
+void *removeFirst(LIST *lp) {
+  assert(lp != NULL && lp->count > 0);
+  NODE *first = lp->head->next;
+  void *data = first->data;
+  lp->head->next = first->next;
+  first->next->prev = first->next;
+  lp->count--;
+  free(first);
+  return data;
+}
 
 // copied
 // void *removeLast(LIST *lp) {
