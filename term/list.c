@@ -170,9 +170,9 @@ void *getLast(LIST *lp) {
 }
 
 // copied
-// void *getItem(LIST *lp, int index) {
-//   assert(lp != NULL && index > 0 && index < lp->count);
-//   return lp->head->data[index];
-// }
+void *getItem(LIST *lp, int index) {
+  assert(lp != NULL && index > 0 && index < lp->count);
+  return lp->head->data[index];
+}
 
-// void setItem(LIST *lp, int index, void *item);
+void setItem(LIST *lp, int index, void *item);
