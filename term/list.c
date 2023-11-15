@@ -158,20 +158,20 @@ void *removeLast(LIST *lp) {
 }
 
 // copied
-// void *getFirst(LIST *lp) {
-//   assert(lp != NULL && lp->count > 0);
-//   return (lp->head->next->data);
-// }
+void *getFirst(LIST *lp) {
+  assert(lp != NULL && lp->count > 0);
+  return (lp->head->next->data);
+}
 
 // copied
-// void *getLast(LIST *lp) {
-//   assert(lp != NULL && lp->count > 0);
-//   return (lp->head->prev->data);
-// }
+void *getLast(LIST *lp) {
+  assert(lp != NULL && lp->count > 0);
+  return (lp->head->prev->data);
+}
 
 // copied
 // void *getItem(LIST *lp, int index) {
-//   assert(lp != NULL);
+//   assert(lp != NULL && index > 0 && index < lp->count);
 //   return lp->head->data[index];
 // }
 
