@@ -35,8 +35,7 @@ LIST *createList(void) {
   lp->head = head;
   head->next = head->prev = lp->head;
   head->data = NULL;
-  head->count = head->start = 0;
-  head->length = 10;
+  head->count = head->start = head->length = 10;
   lp->count = 0;
 
   return lp;
@@ -51,6 +50,7 @@ void destroyList(LIST *lp) {
     free(this);
     this = next;
   }
+  free(lp->head->data);
   free(lp->head);
   free(lp);
 }
@@ -82,7 +82,7 @@ void addFirst(LIST *lp, void *item) {
   NODE *head = lp->head;
   NODE *first = head->next;
   // if it's the very first node in the list or if the first node is full
-  if (first == head || first->count == first->length) {
+  if (first->count == first->length) {
     NODE *new = createNode(head);
 
     // shift pounters around
@@ -107,7 +107,7 @@ void addLast(LIST *lp, void *item) {
   NODE *head = lp->head;
   NODE *last = head->prev;
   // if it's the very first node in the list or if the last node is full
-  if (last == head || last->count == last->length) {
+  if (last->count == last->length) {
     NODE *new = createNode(head);
 
     // shift pounters around
