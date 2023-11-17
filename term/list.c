@@ -44,13 +44,14 @@ LIST *createList(void) {
 
 void destroyList(LIST *lp) {
   assert(lp != NULL);
-  NODE *this = lp->head;
-  while (this != NULL) {
+  NODE *this = lp->head->next;
+  while (this != lp->head) {
     NODE *next = this->next;
     free(this->data);
     free(this);
     this = next;
   }
+  free(lp->head);
   free(lp);
 }
 
