@@ -93,7 +93,7 @@ void addFirst(LIST *lp, void *item) {
     first = new;
   }
 
-  first->data[first->start + (first->count % first->length)] = item;
+  first->data[(first->start + first->count) % first->length] = item;
   first->count++;
   lp->count++;
 
@@ -118,7 +118,7 @@ void addLast(LIST *lp, void *item) {
     last = new;
   }
 
-  last->data[last->start + (last->count % last->length)] = item;
+  last->data[(last->start + last->count) % last->length] = item;
   last->count++;
   lp->count++;
 
@@ -130,13 +130,18 @@ void *removeFirst(LIST *lp) {
 
   NODE *head = lp->head;
   NODE *first = head->next;
-  void *data = first->data;
 
-  head->next = first->next;
-  first->next->prev = head;
-  lp->count -= first->count;
+  if (first->count == 0) {
+    head->next = first->next;
+    first->next->prev = head;
+    free(first);
+    NODE *first = head->next;
+  }
 
-  free(first);
+  void *data = first->data[first->start];
+  first->start = (first->start + 1) % first->length;
+  first->count--;
+  lp->count--;
 
   return data;
 }
@@ -146,33 +151,36 @@ void *removeLast(LIST *lp) {
 
   NODE *head = lp->head;
   NODE *last = head->prev;
-  void *data = last->data;
 
-  head->prev = last->prev;
-  last->prev->next = head;
-  lp->count -= last->count;
+  if (last->count == 0) {
+    head->prev = last->prev;
+    last->prev->next = head;
+    free(last);
+    NODE *last = head->prev;
+  }
 
-  free(last);
+  last->count--;
+  void *data = last->data[(last->start + last->count) % last->length];
+  lp->count--;
 
   return data;
 }
 
-// copied
 void *getFirst(LIST *lp) {
   assert(lp != NULL && lp->count > 0);
-  return (lp->head->next->data);
+  NODE *first = lp->head->next;
+  return (first->data[first->start]);
 }
 
-// copied
 void *getLast(LIST *lp) {
   assert(lp != NULL && lp->count > 0);
-  return (lp->head->prev->data);
+  NODE *last = lp->head->prev;
+  return (last->data[(last->start + last->count - 1) % last->length]);
 }
 
-// copied
-// void *getItem(LIST *lp, int index) {
-//   assert(lp != NULL && index > 0 && index < lp->count);
-//   return lp->head->data[index];
-// }
+void *getItem(LIST *lp, int index) {
+  assert(lp != NULL && index > 0 && index < lp->count);
+  return lp->head->data[index];
+}
 
 // void setItem(LIST *lp, int index, void *item);
