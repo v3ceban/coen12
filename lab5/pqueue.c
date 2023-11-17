@@ -1,8 +1,23 @@
+/*
+ * File: pqueue.c
+ *
+ * Copyright:	2023, Vladimir Ceban
+ *
+ * Desription: This file contains functions defined in pqueue.h
+ * that are used in the main driver functions. The functions create and
+ * manipulate the priority queue.
+ *
+ * See comments for the functions below for mode detailed desctiption for each
+ * of them.
+ *
+ */
+
 #include "pqueue.h"
 #include "assert.h"
 #include "stdio.h"
 #include "stdlib.h"
 
+// Defines priority queue type
 typedef struct pqueue {
   int count;
   int length;
@@ -10,6 +25,7 @@ typedef struct pqueue {
   int (*compare)(void *, void *);
 } PQ;
 
+// Creates priority queue and returns pointer to it. Big O complexity: O(1)
 PQ *createQueue(int (*compare)()) {
   // me no create compare. me assert compare
   assert(compare != NULL);
@@ -30,6 +46,7 @@ PQ *createQueue(int (*compare)()) {
   return q;
 }
 
+// Destroys priority queue and frees all data. Big O complexity: O(1)
 void destroyQueue(PQ *pq) {
   // me no create pq. me assert pq
   assert(pq != NULL);
@@ -37,12 +54,15 @@ void destroyQueue(PQ *pq) {
   free(pq);
 }
 
+// Returns number of items in priority queue. Big O complexity: O(1)
 int numEntries(PQ *pq) {
   // me no create pq. me assert pq
   assert(pq != NULL);
   return pq->count;
 }
 
+// Adds a new entry in the priority queue. Big O complexity: O(log n), where n
+// is the number of entries in the priority queue
 void addEntry(PQ *pq, void *entry) {
   // me no create pq and entry. me assert them
   assert(pq != NULL && entry != NULL);
@@ -79,6 +99,8 @@ void addEntry(PQ *pq, void *entry) {
   /*** END HEAP UP ***/
 }
 
+// Removes an entry from the priority queue. Big O complexity: O(log n), where n
+// is the number of entries in the priority queue
 void *removeEntry(PQ *pq) {
   // me no create pq. me assert pq
   assert(pq != NULL && pq->count > 0);
