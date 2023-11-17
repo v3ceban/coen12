@@ -44,12 +44,12 @@ LIST *createList(void) {
 
 void destroyList(LIST *lp) {
   assert(lp != NULL);
-  NODE *current = lp->head;
-  while (current != NULL) {
-    NODE *next = current->next;
-    free(current->data);
-    free(current);
-    current = next;
+  NODE *this = lp->head;
+  while (this != NULL) {
+    NODE *next = this->next;
+    free(this->data);
+    free(this);
+    this = next;
   }
   free(lp);
 }
@@ -135,7 +135,7 @@ void *removeFirst(LIST *lp) {
     head->next = first->next;
     first->next->prev = head;
     free(first);
-    NODE *first = head->next;
+    first = head->next;
   }
 
   void *data = first->data[first->start];
@@ -156,7 +156,7 @@ void *removeLast(LIST *lp) {
     head->prev = last->prev;
     last->prev->next = head;
     free(last);
-    NODE *last = head->prev;
+    last = head->prev;
   }
 
   last->count--;
@@ -179,8 +179,25 @@ void *getLast(LIST *lp) {
 }
 
 void *getItem(LIST *lp, int index) {
-  assert(lp != NULL && index > 0 && index < lp->count);
-  return lp->head->data[index];
+  assert(lp != NULL && index >= 0 && index < lp->count);
+
+  NODE *this = lp->head->next;
+  int i = index;
+  while (i >= this->count) {
+    i -= this->count;
+    this = this->next;
+  }
+
+  return this->data[(this->start + i) % this->length];
 }
 
-// void setItem(LIST *lp, int index, void *item);
+void setItem(LIST *lp, int index, void *item) {
+  assert(lp != NULL && index >= 0 && item != NULL);
+  NODE *this = lp->head->next;
+  int i = index;
+  while (i >= this->count) {
+    i -= this->count;
+    this = this->next;
+  }
+  this->data[(this->start + i) % this->length] = item;
+}
