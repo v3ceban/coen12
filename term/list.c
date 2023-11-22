@@ -85,7 +85,7 @@ void addFirst(LIST *lp, void *item) {
   if (first->count == first->length) {
     NODE *new = createNode(head);
 
-    // shift pounters around
+    // shift pointers around
     new->next = first;
     new->prev = head;
     head->next = first->prev = new;
@@ -94,7 +94,8 @@ void addFirst(LIST *lp, void *item) {
     first = new;
   }
 
-  first->data[(first->start + first->count) % first->length] = item;
+  first->start = (first->start - 1 + first->length) % first->length;
+  first->data[first->start] = item;
   first->count++;
   lp->count++;
 
