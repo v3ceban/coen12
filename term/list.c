@@ -94,6 +94,8 @@ void addFirst(LIST *lp, void *item) {
     first = new;
   }
 
+  // shift start position in the node one left to insert the new item in the
+  // very beginning of the node
   first->start = (first->start - 1 + first->length) % first->length;
   first->data[first->start] = item;
   first->count++;
