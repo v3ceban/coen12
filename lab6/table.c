@@ -205,21 +205,16 @@ void *findElement(SET *sp, void *elt) {
   return found ? sp->data[locn] : NULL;
 }
 
-/*
- * Function:	getElements
- *
- * Complexity:	O(m)
- *
- * Description:	Allocate and return an array of elements in the set pointed
- *		to by SP.
- */
-
+// swaps two pointers
+// O(1)
 static void swap(void **a, void **b) {
   void *temp = *a;
   *a = *b;
   *b = temp;
 }
 
+// partitions the subarray around the pivot
+// O(n), n=high-low=sp->count-1
 static int partition(int low, int high, void **array,
                      int (*compare)(void *, void *)) {
   int idx = high;
@@ -236,6 +231,8 @@ static int partition(int low, int high, void **array,
   return j;
 }
 
+// sorts the subarrays to the left and rigth of the pivot
+// O(nlogn) (n for partition and logn for quicksort itself)
 static void quicksort(int low, int high, void **array,
                       int (*compare)(void *, void *)) {
   if (low < high) {
@@ -244,6 +241,15 @@ static void quicksort(int low, int high, void **array,
     quicksort(idx + 1, high, array, compare);
   }
 }
+
+/*
+ * Function:	getElements
+ *
+ * Complexity:	O(m)
+ *
+ * Description:	Allocate and return an array of elements in the set pointed
+ *		to by SP.
+ */
 
 void *getElements(SET *sp) {
   int i, j;
